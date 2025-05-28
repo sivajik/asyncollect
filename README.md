@@ -1,1 +1,2 @@
 # asyncollect
+<u>Asyn</u>chronous <u>Collect</u>ion - Java <b>Virtual Threads</b> enabled <b>Parallel Collectors</b> to boost the performance raised above the out of the box standard <b>Parallel Streams</b>
