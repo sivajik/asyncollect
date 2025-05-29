@@ -1,0 +1,114 @@
+[
+    {
+        "jmhVersion" : "1.37",
+        "benchmark" : "org.jingineering.collectors.benchmark.AsynCollectorParallelBenchmark.asynCollectNonParallel",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=56414",
+            "-Dfile.encoding=UTF-8",
+            "-Dsun.stdout.encoding=UTF-8",
+            "-Dsun.stderr.encoding=UTF-8"
+        ],
+        "jdkVersion" : "21.0.2",
+        "vmName" : "Java HotSpot(TM) 64-Bit Server VM",
+        "vmVersion" : "21.0.2+13-LTS-58",
+        "warmupIterations" : 3,
+        "warmupTime" : "10 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 5,
+        "measurementTime" : "10 s",
+        "measurementBatchSize" : 1,
+        "primaryMetric" : {
+            "score" : 81920.00340530649,
+            "scoreError" : 3770.8440900854634,
+            "scoreConfidence" : [
+                78149.15931522103,
+                85690.84749539195
+            ],
+            "scorePercentiles" : {
+                "0.0" : 81287.46168356172,
+                "50.0" : 81542.04889673875,
+                "90.0" : 83648.91370685276,
+                "95.0" : 83648.91370685276,
+                "99.0" : 83648.91370685276,
+                "99.9" : 83648.91370685276,
+                "99.99" : 83648.91370685276,
+                "99.999" : 83648.91370685276,
+                "99.9999" : 83648.91370685276,
+                "100.0" : 83648.91370685276
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    81712.08900112717,
+                    81542.04889673875,
+                    81287.46168356172,
+                    83648.91370685276,
+                    81409.50373825205
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    },
+    {
+        "jmhVersion" : "1.37",
+        "benchmark" : "org.jingineering.collectors.benchmark.AsynCollectorParallelBenchmark.asynCollectParallel",
+        "mode" : "thrpt",
+        "threads" : 1,
+        "forks" : 1,
+        "jvm" : "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java",
+        "jvmArgs" : [
+            "-javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=56414",
+            "-Dfile.encoding=UTF-8",
+            "-Dsun.stdout.encoding=UTF-8",
+            "-Dsun.stderr.encoding=UTF-8"
+        ],
+        "jdkVersion" : "21.0.2",
+        "vmName" : "Java HotSpot(TM) 64-Bit Server VM",
+        "vmVersion" : "21.0.2+13-LTS-58",
+        "warmupIterations" : 3,
+        "warmupTime" : "10 s",
+        "warmupBatchSize" : 1,
+        "measurementIterations" : 5,
+        "measurementTime" : "10 s",
+        "measurementBatchSize" : 1,
+        "primaryMetric" : {
+            "score" : 49352.755326991486,
+            "scoreError" : 1854.4757438676265,
+            "scoreConfidence" : [
+                47498.27958312386,
+                51207.23107085911
+            ],
+            "scorePercentiles" : {
+                "0.0" : 48705.684755745504,
+                "50.0" : 49395.99083672081,
+                "90.0" : 49888.62665065147,
+                "95.0" : 49888.62665065147,
+                "99.0" : 49888.62665065147,
+                "99.9" : 49888.62665065147,
+                "99.99" : 49888.62665065147,
+                "99.999" : 49888.62665065147,
+                "99.9999" : 49888.62665065147,
+                "100.0" : 49888.62665065147
+            },
+            "scoreUnit" : "ops/s",
+            "rawData" : [
+                [
+                    49056.795816875114,
+                    49716.678574964506,
+                    49395.99083672081,
+                    48705.684755745504,
+                    49888.62665065147
+                ]
+            ]
+        },
+        "secondaryMetrics" : {
+        }
+    }
+]
+
+
