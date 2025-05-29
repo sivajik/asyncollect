@@ -11,23 +11,23 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class AsynCollectorParallelBenchmark {
     @Benchmark
     public List<Integer> asynCollectParallel() {
-        CompletableFuture<List<Integer>> op = Stream
-                .of(1, 3, 5, 7, 9, 11, 13)
+        CompletableFuture<List<Integer>> op = IntStream.range(0, 10000)
+                .boxed()
                 .collect(AsynCollectors.parallel(i -> i + 1, Collectors.toList()));
         return op.join();
     }
 
     @Benchmark
     public List<Integer> asynCollectNonParallel() {
-        return Stream
-                .of(1, 3, 5, 7, 9, 11, 13)
-                .parallel()
+        return IntStream.range(0, 10000).parallel()
                 .map(i -> i + 1)
+                .boxed()
                 .collect(Collectors.toList());
     }
 
@@ -38,7 +38,7 @@ public class AsynCollectorParallelBenchmark {
         new Runner(new OptionsBuilder()
                 .include(className)
                 .warmupIterations(3)
-                .measurementIterations(5)
+                .measurementIterations(3)
                 .resultFormat(ResultFormatType.JSON)
                 .result(BENCHMARKS_PATH.resolve("%s.json".formatted(className)).toString())
                 .forks(1)
