@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jingineering</groupId>
+    <artifactId>asyncollect</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <url>https://github.com/sivajik/asyncollect</url>
+
+    <packaging>jar</packaging>
+
+    <name>asyncollect</name>
+    <description>Java Virtual Threads enabled Parallel Collectors</description>
+
+    <scm>
+        <url>https://github.com/sivajik/asyncollect</url>
+        <connection>scm:git:git@github.com:sivajik/asyncollect.git</connection>
+        <developerConnection>scm:git:git@github.com:sivajik/asyncollect.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+</project>
