@@ -6,9 +6,9 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-public final class AsyncCollectorsFactory {
+public final class AsynCollectorsFactory {
     static <T, R, C> Collector<T, ?, CompletableFuture<C>> collecting(Function<Stream<R>, C> finalizer,
                                                                       Function<? super T, ? extends R> mapper) {
-        return AsyncParallelCollector.from(mapper, finalizer, Executors.newVirtualThreadPerTaskExecutor());
+        return AsynParallelCollector.from(mapper, finalizer, Executors.newVirtualThreadPerTaskExecutor());
     }
 }

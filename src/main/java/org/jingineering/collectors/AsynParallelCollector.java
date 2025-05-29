@@ -13,15 +13,15 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-public class AsyncParallelCollector<T, R, C>
+public class AsynParallelCollector<T, R, C>
         implements Collector<T, List<CompletableFuture<R>>, CompletableFuture<C>> {
     private final Function<? super T, ? extends R> task;
     private final Function<Stream<R>, C> finalizer;
     private final TaskDispatcher<R> taskDispatcher;
 
-    private AsyncParallelCollector(Function<? super T, ? extends R> task,
-                                   Function<Stream<R>, C> finalizer,
-                                   TaskDispatcher<R> taskDispatcher
+    private AsynParallelCollector(Function<? super T, ? extends R> task,
+                                  Function<Stream<R>, C> finalizer,
+                                  TaskDispatcher<R> taskDispatcher
     ) {
         this.task = task;
         this.finalizer = finalizer;
@@ -31,7 +31,7 @@ public class AsyncParallelCollector<T, R, C>
     public static <T, R, C> Collector<T, ?, CompletableFuture<C>> from(Function<? super T, ? extends R> task,
                                                                        Function<Stream<R>, C> finalizer,
                                                                        Executor executor) {
-        return new AsyncParallelCollector<>(task, finalizer, new TaskDispatcher<>(executor));
+        return new AsynParallelCollector<>(task, finalizer, new TaskDispatcher<>(executor));
     }
 
     @Override

@@ -9,7 +9,9 @@ import java.util.stream.Collector;
  *
  * @author Sivaji Kondapalli
  */
-public final class AsyncCollectors {
+public final class AsynCollectors {
+    private AsynCollectors() {
+    }
 
     /**
      * A {@link Collector} powered to perform tasks in parallel using java virtual threads
@@ -35,7 +37,6 @@ public final class AsyncCollectors {
      */
     public static <T, R, RR> Collector<T, ?, CompletableFuture<RR>> parallel(Function<? super T, ? extends R> mapper,
                                                                              Collector<R, ?, RR> collector) {
-        return AsyncCollectorsFactory.collecting(stream -> stream.collect(collector), mapper);
+        return AsynCollectorsFactory.collecting(stream -> stream.collect(collector), mapper);
     }
-
 }
