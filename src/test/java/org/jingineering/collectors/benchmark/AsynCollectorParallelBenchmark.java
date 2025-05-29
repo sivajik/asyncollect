@@ -25,7 +25,8 @@ public class AsynCollectorParallelBenchmark {
 
     @Benchmark
     public List<Integer> asynCollectNonParallel() {
-        return IntStream.range(0, 10000).parallel()
+        return IntStream.range(0, 10000)
+                .parallel()
                 .map(i -> i + 1)
                 .boxed()
                 .collect(Collectors.toList());
