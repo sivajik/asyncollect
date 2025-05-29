@@ -1,5 +1,7 @@
 package org.jingineering.collectors;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -32,29 +34,59 @@ public class AsyncParallelCollector<T, R, C>
         return new AsyncParallelCollector<>(task, finalizer, new TaskDispatcher<>(executor));
     }
 
-
     @Override
     public Supplier<List<CompletableFuture<R>>> supplier() {
-        return null;
+        return ArrayList::new;
     }
 
     @Override
     public BiConsumer<List<CompletableFuture<R>>, T> accumulator() {
-        return null;
+        return (accumulator, element) -> {
+            if (!taskDispatcher.isRunning()) {
+                taskDispatcher.start();
+            }
+            accumulator.add(taskDispatcher.enqueue(() -> task.apply(element)));
+        };
     }
 
+    /**
+     * This is the optional step, which is executed only when the stream is processed in a parallel era, and if the
+     * Stream is sequential, then this step will be skipped. The Combine step is used to combine all the elements into
+     * a single container. In this method, we're supposed to return a Binary Operator function that combines two
+     * accumulated containers.
+     *
+     * @return
+     */
     @Override
     public BinaryOperator<List<CompletableFuture<R>>> combiner() {
-        return null;
+        return (left, right) -> {
+            throw new UnsupportedOperationException("this is not implemented");
+        };
     }
 
     @Override
     public Function<List<CompletableFuture<R>>, CompletableFuture<C>> finisher() {
-        return null;
+        return results -> {
+            taskDispatcher.stop();
+            return combine(results).thenApply(finalizer);
+        };
+    }
+
+    private static <T> CompletableFuture<Stream<T>> combine(List<CompletableFuture<T>> futures) {
+        var combined = CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+                .thenApply(__ -> futures.stream().map(CompletableFuture::join));
+        for (var future : futures) {
+            future.whenComplete((result, exception) -> {
+                if (exception != null) {
+                    combined.completeExceptionally(exception);
+                }
+            });
+        }
+        return combined;
     }
 
     @Override
     public Set<Characteristics> characteristics() {
-        return Set.of();
+        return Collections.emptySet();
     }
 }
