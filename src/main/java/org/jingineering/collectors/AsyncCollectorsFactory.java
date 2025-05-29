@@ -8,6 +8,6 @@ import java.util.stream.Stream;
 
 public final class AsyncCollectorsFactory {
     static <T, R, C> Collector<T, ?, CompletableFuture<C>> collecting(Function<Stream<R>, C> finalizer, Function<? super T, ? extends R> mapper) {
-        return AsyncParallelCollector.from(mapper, finalizer, Executors::newVirtualThreadPerTaskExecutor);
+        return AsyncParallelCollector.from(mapper, finalizer, Executors.newVirtualThreadPerTaskExecutor());
     }
 }

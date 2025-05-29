@@ -2,10 +2,10 @@ package org.jingineering.collectors;
 
 import java.util.concurrent.Executor;
 
-public class Dispatcher<R> {
+public class TaskDispatcher<R> {
     private final Executor executor;
 
-    Dispatcher(Executor executor) {
+    TaskDispatcher(Executor executor) {
         this.executor = executor;
     }
 }

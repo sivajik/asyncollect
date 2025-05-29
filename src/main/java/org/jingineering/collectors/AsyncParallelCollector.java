@@ -15,21 +15,21 @@ public class AsyncParallelCollector<T, R, C>
         implements Collector<T, List<CompletableFuture<R>>, CompletableFuture<C>> {
     private final Function<? super T, ? extends R> task;
     private final Function<Stream<R>, C> finalizer;
-    private final Dispatcher<R> dispatcher;
+    private final TaskDispatcher<R> taskDispatcher;
 
     private AsyncParallelCollector(Function<? super T, ? extends R> task,
                                    Function<Stream<R>, C> finalizer,
-                                   Dispatcher<R> dispatcher
+                                   TaskDispatcher<R> taskDispatcher
     ) {
         this.task = task;
         this.finalizer = finalizer;
-        this.dispatcher = dispatcher;
+        this.taskDispatcher = taskDispatcher;
     }
 
     public static <T, R, C> Collector<T, ?, CompletableFuture<C>> from(Function<? super T, ? extends R> task,
                                                                        Function<Stream<R>, C> finalizer,
                                                                        Executor executor) {
-        return new AsyncParallelCollector<>(task, finalizer, new Dispatcher<>(executor));
+        return new AsyncParallelCollector<>(task, finalizer, new TaskDispatcher<>(executor));
     }
 
 
