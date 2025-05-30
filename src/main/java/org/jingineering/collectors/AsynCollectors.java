@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 
 /**
- * Main class to house all factory (static) methods and acts as a facade to many parallel {@link java.util.stream.Collector}s
+ * Main class to house all (static) factory methods (a facade) to many parallel {@link java.util.stream.Collector}s
  *
  * @author Sivaji Kondapalli
  */
@@ -14,9 +14,11 @@ public final class AsynCollectors {
     }
 
     /**
-     * A {@link Collector} powered to perform tasks in parallel using java virtual threads
-     * and returning them as a {@link CompletableFuture} containing a result of the application
-     * of the user-provided {@link Collector}.
+     * A {@link Collector} powered to perform tasks in parallel using java virtual threads and returning them as a
+     * {@link CompletableFuture} containing a result of the application of the user-provided {@link Collector}.
+     * This method takes a function argument which applied on (type) T and gives back (type) R, then collects all R's to
+     * another mutable collector of type RR. The result (the collector) is wrapped in a CompletableFuture so that non-blocking,
+     * composable operations can be chained.
      *
      * <br>
      * Sample:

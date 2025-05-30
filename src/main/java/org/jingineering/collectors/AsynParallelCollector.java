@@ -13,14 +13,14 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-public class AsynParallelCollector<T, R, C>
-        implements Collector<T, List<CompletableFuture<R>>, CompletableFuture<C>> {
+public class AsynParallelCollector<T, R, RR>
+        implements Collector<T, List<CompletableFuture<R>>, CompletableFuture<RR>> {
     private final Function<? super T, ? extends R> task;
-    private final Function<Stream<R>, C> finalizer;
+    private final Function<Stream<R>, RR> finalizer;
     private final TaskDispatcher<R> taskDispatcher;
 
     private AsynParallelCollector(Function<? super T, ? extends R> task,
-                                  Function<Stream<R>, C> finalizer,
+                                  Function<Stream<R>, RR> finalizer,
                                   TaskDispatcher<R> taskDispatcher
     ) {
         this.task = task;
@@ -28,9 +28,9 @@ public class AsynParallelCollector<T, R, C>
         this.taskDispatcher = taskDispatcher;
     }
 
-    public static <T, R, C> Collector<T, ?, CompletableFuture<C>> from(Function<? super T, ? extends R> task,
-                                                                       Function<Stream<R>, C> finalizer,
-                                                                       Executor executor) {
+    public static <T, R, RR> Collector<T, ?, CompletableFuture<RR>> from(Function<? super T, ? extends R> task,
+                                                                         Function<Stream<R>, RR> finalizer,
+                                                                         Executor executor) {
         return new AsynParallelCollector<>(task, finalizer, new TaskDispatcher<>(executor));
     }
 
@@ -49,13 +49,11 @@ public class AsynParallelCollector<T, R, C>
         };
     }
 
-    /**
+    /*
      * This is the optional step, which is executed only when the stream is processed in a parallel era, and if the
      * Stream is sequential, then this step will be skipped. The Combine step is used to combine all the elements into
      * a single container. In this method, we're supposed to return a Binary Operator function that combines two
      * accumulated containers.
-     *
-     * @return
      */
     @Override
     public BinaryOperator<List<CompletableFuture<R>>> combiner() {
@@ -65,14 +63,14 @@ public class AsynParallelCollector<T, R, C>
     }
 
     @Override
-    public Function<List<CompletableFuture<R>>, CompletableFuture<C>> finisher() {
+    public Function<List<CompletableFuture<R>>, CompletableFuture<RR>> finisher() {
         return results -> {
             taskDispatcher.stop();
             return combine(results).thenApply(finalizer);
         };
     }
 
-    private static <T> CompletableFuture<Stream<T>> combine(List<CompletableFuture<T>> futures) {
+    private static <R> CompletableFuture<Stream<R>> combine(List<CompletableFuture<R>> futures) {
         var combined = CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
                 .thenApply(__ -> futures.stream().map(CompletableFuture::join));
         for (var future : futures) {
