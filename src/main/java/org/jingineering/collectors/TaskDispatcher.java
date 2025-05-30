@@ -16,9 +16,9 @@ public class TaskDispatcher<T> {
     private final ThreadFactory threadFactory = Thread::startVirtualThread;
     private final BlockingQueue<Runnable> workingQueue = new LinkedBlockingQueue<>();
     private final AtomicBoolean started = new AtomicBoolean(false);
-    private static final Runnable STOP = () -> System.out.println("stop");
+    private static final Runnable STOP = () -> System.out.println("stop stop stop stop");
     private final CompletableFuture<Void> completionSignaller = new CompletableFuture<>();
-    private volatile boolean shortCircuited = false;
+    //private volatile boolean shortCircuited = false;
 
     TaskDispatcher(Executor executor) {
         this.executor = executor;
@@ -42,7 +42,7 @@ public class TaskDispatcher<T> {
                             break;
                         }
                     }
-                } catch (Throwable e) {
+                } catch (Throwable ignored) {
 
                 }
             });
@@ -88,9 +88,9 @@ public class TaskDispatcher<T> {
     private FutureTask<Void> completionTask(Supplier<T> supplier, InterruptibleCompletableFuture<T> future) {
         FutureTask<Void> task = new FutureTask<>(() -> {
             try {
-                if (!shortCircuited) {
-                    future.complete(supplier.get());
-                }
+                //if (!shortCircuited) {
+                future.complete(supplier.get());
+                //}
             } catch (Throwable e) {
                 handle(e);
             }
@@ -100,7 +100,7 @@ public class TaskDispatcher<T> {
     }
 
     private void handle(Throwable e) {
-        shortCircuited = true;
+        //shortCircuited = true;
         completionSignaller.completeExceptionally(e);
     }
 

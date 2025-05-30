@@ -10,22 +10,23 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class AsynCollectorParallelBenchmark {
     @Benchmark
-    public List<Integer> asynCollectParallel() {
-        CompletableFuture<List<Integer>> op = IntStream.range(0, 10000)
+    public List<Integer> asynCollectParallelVirtualThreads() {
+        CompletableFuture<List<Integer>> op = IntStream.range(0, 1000)
                 .boxed()
-                .collect(AsynCollectors.parallel(i -> i + 1, Collectors.toList()));
+                .collect(AsynCollectors.parallel(i -> i + 1, Collectors.toList(),
+                        Executors.newVirtualThreadPerTaskExecutor()));
         return op.join();
     }
 
     @Benchmark
-    public List<Integer> asynCollectNonParallel() {
-        return IntStream.range(0, 10000)
+    public List<Integer> asynCollectParallelStreams() {
+        return IntStream.range(0, 1000)
                 .parallel()
                 .map(i -> i + 1)
                 .boxed()
