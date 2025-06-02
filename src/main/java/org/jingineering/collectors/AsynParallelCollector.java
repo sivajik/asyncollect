@@ -28,10 +28,10 @@ public class AsynParallelCollector<T, R, RR>
         this.taskDispatcher = taskDispatcher;
     }
 
-    public static <T, R, RR> Collector<T, ?, CompletableFuture<RR>> from(Function<? super T, ? extends R> task,
+    public static <T, R, RR> Collector<T, ?, CompletableFuture<RR>> from(Function<? super T, ? extends R> blockingFn,
                                                                          Function<Stream<R>, RR> finalizer,
                                                                          Executor executor) {
-        return new AsynParallelCollector<>(task, finalizer, new TaskDispatcher<>(executor));
+        return new AsynParallelCollector<>(blockingFn, finalizer, new TaskDispatcher<>(executor));
     }
 
     @Override

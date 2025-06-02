@@ -41,7 +41,7 @@ public final class AsynCollectors {
      */
     public static <T, R, RR> Collector<T, ?, CompletableFuture<RR>> parallel(Function<? super T, ? extends R> mapper,
                                                                              Collector<R, ?, RR> collector) {
-        return AsynCollectorsFactory.collecting(stream -> stream.collect(collector), mapper);
+        return AsynCollectorsFactory.collecting(mapper, stream -> stream.collect(collector));
     }
 
     /**
@@ -69,6 +69,6 @@ public final class AsynCollectors {
     public static <T, R, RR> Collector<T, ?, CompletableFuture<RR>> parallel(Function<? super T, ? extends R> mapper,
                                                                              Collector<R, ?, RR> collector,
                                                                              Executor executor) {
-        return AsynCollectorsFactory.collecting(stream -> stream.collect(collector), mapper, executor);
+        return AsynCollectorsFactory.collecting(mapper, stream -> stream.collect(collector), executor);
     }
 }
