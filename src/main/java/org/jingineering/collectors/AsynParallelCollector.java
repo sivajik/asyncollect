@@ -13,6 +13,14 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+/**
+ * Custom {@code java.util.Collector} implementation to run the mapper function in given thread executor and finish them
+ * in a given {@code java.util.concurrent.CompletableFuture}.
+ *
+ * @param <T>  the type of input elements to the reduction operation
+ * @param <R>  the mutable accumulation type of the reduction operation
+ * @param <RR> the result type of the reduction operation
+ */
 public class AsynParallelCollector<T, R, RR>
         implements Collector<T, List<CompletableFuture<R>>, CompletableFuture<RR>> {
     private final Function<? super T, ? extends R> task;
