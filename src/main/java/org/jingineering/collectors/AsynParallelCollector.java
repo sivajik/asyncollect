@@ -15,7 +15,10 @@ import java.util.stream.Stream;
 
 /**
  * Custom {@code java.util.Collector} implementation to run the mapper function in given thread executor and finish them
- * in a given {@code java.util.concurrent.CompletableFuture}.
+ * in a given {@code java.util.concurrent.CompletableFuture}. The second operation (accumulation) enqueues the task of
+ * running a mapper function (usually non-blocking) to a {@code java.util.concurrent.BlockingQueue}. The final step of
+ * Collector implementation (finisher) will combine the results and apply finalizer function (i.e. collecting to a
+ * collector)
  *
  * @param <T>  the type of input elements to the reduction operation
  * @param <R>  the mutable accumulation type of the reduction operation
@@ -23,7 +26,7 @@ import java.util.stream.Stream;
  */
 public class AsynParallelCollector<T, R, RR>
         implements Collector<T, List<CompletableFuture<R>>, CompletableFuture<RR>> {
-    private final Function<? super T, ? extends R> task;
+    private final Function<? super T, ? extends R> mapperFunction;
     private final Function<Stream<R>, RR> finalizer;
     private final TaskDispatcher<R> taskDispatcher;
 
@@ -31,7 +34,7 @@ public class AsynParallelCollector<T, R, RR>
                                   Function<Stream<R>, RR> finalizer,
                                   TaskDispatcher<R> taskDispatcher
     ) {
-        this.task = task;
+        this.mapperFunction = task;
         this.finalizer = finalizer;
         this.taskDispatcher = taskDispatcher;
     }
@@ -53,7 +56,7 @@ public class AsynParallelCollector<T, R, RR>
             if (!taskDispatcher.isRunning()) {
                 taskDispatcher.start();
             }
-            accumulator.add(taskDispatcher.enqueue(() -> task.apply(element)));
+            accumulator.add(taskDispatcher.enqueue(() -> mapperFunction.apply(element)));
         };
     }
 
